@@ -1,0 +1,350 @@
+<template>
+  <!-- <template if:true={isLoaded}>
+    <lightning-spinner alternative-text="Loading"></lightning-spinner>
+  </template> -->
+
+  <!-- Custom Login -->
+  <template if:false={isLoggedIn}>
+
+    <!-- Loading Spinner -->
+    <template if:true={showSpinner}>
+      <lightning-spinner alternative-text="Loading"></lightning-spinner>
+    </template>
+
+    
+    <div class="slds-align_absolute-center slds-m-around_large">
+      <div class="slds-box slds-theme_default slds-size_medium">
+        <!-- Heading -->
+        <h1 class="slds-text-align_center slds-text-heading_medium">Login</h1>
+
+        <!-- Password Input -->
+        <div class="slds-form-element slds-m-bottom_medium">
+          <label class="slds-form-element__label" for="password">Password</label>
+          <div class="slds-form-element__control">
+            <input
+              value={loginPassword}
+              type="password"
+              id="password"
+              name="loginPassword"
+              class="slds-input"
+              oninput={handleInputPassword} />
+          </div>
+        </div>
+
+        <!-- Log In Button -->
+        <div class="slds-text-align_center slds-m-bottom_medium">
+          <button class="slds-button slds-button_brand" onclick={validatePassword}>Log In</button>
+        </div>
+
+        <!-- Show Error Message -->
+        <div class="slds-text-color_error slds-text-align_center">{errorMessage}</div>
+      </div>
+    </div>
+  </template>
+  <!-- /Custom Login -->
+
+  <template if:true={isLoggedIn}>
+    <div>
+      <img src="/deardochome/file-asset/prescription" style="width: 10rem" />
+    </div>
+    <lightning-card title="Create Case" class="remove-border">
+      <!-- Loading Spinner -->
+      <template if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading"></lightning-spinner>
+      </template>
+
+      <lightning-tabset active-tab-value="tab1">
+        <lightning-tab label="New Customer" value="tab1" onactive={handleActive}>
+          <div class="box">
+            <div class="slds-grid slds-gutters">
+              <div class="slds-col slds-size_6-of-12">
+                <lightning-input
+                  type="text"
+                  name={caseObj.AccountName}
+                  label=" What is the name of your entity?"
+                  required
+                  value={caseObj.AccountName}
+                  onchange={handleAccountName}></lightning-input>
+                <!-- <lightning-combobox
+                name={caseObj.Status}
+                label="Status"
+                value={caseObj.Status}
+                placeholder="Select Status"
+                options={statusOptions}
+                onchange={handleStatus}
+              >
+              </lightning-combobox> -->
+
+                <!-- <lightning-combobox
+                required
+                name={caseObj.Origin}
+                label="Origin"
+                value={caseObj.Origin}
+                placeholder="Select Origin"
+                options={orginOptions}
+                onchange={handleOrgin}
+              >
+              </lightning-combobox> -->
+                <lightning-input
+                  type="text"
+                  required
+                  label="Entity Website"
+                  name={caseObj.PracticeWebsite}
+                  value={caseObj.PracticeWebsite}
+                  onchange={handlePracticeWebsite}></lightning-input>
+
+                <lightning-combobox
+                  required
+                  label="Is this entity a current customer of DearPro?"
+                  value={caseObj.isCurrentCustomer}
+                  options={isCurrentCustomersOptions}
+                  onchange={handleIsCurrentCustomers}>
+                </lightning-combobox>
+
+                <lightning-input
+                  type="text"
+                  required
+                  label="Requester Name"
+                  name={caseObj.RequestedBy}
+                  value={caseObj.RequestedBy}
+                  onchange={handleRequestedBy}></lightning-input>
+
+                <lightning-textarea
+                  type="text"
+                  label="Other Notes"
+                  name={caseObj.Description}
+                  value={caseObj.Description}
+                  onchange={handleDescription}></lightning-textarea>
+              </div>
+
+              <div class="slds-col slds-size_6-of-12">
+                <lightning-input
+                  type="text"
+                  required
+                  label="What is the name of the entity owner's First Name?"
+                  name={caseObj.FirstName}
+                  value={caseObj.FirstName}
+                  onchange={handleFirstName}></lightning-input>
+                <lightning-input
+                  type="text"
+                  required
+                  label="What is the name of the entity owner's Last Name?"
+                  name={caseObj.LastName}
+                  value={caseObj.LastName}
+                  onchange={handleLastName}></lightning-input>
+                <lightning-input
+                  type="text"
+                  required
+                  label="What is the entity  Email address"
+                  name={caseObj.Email}
+                  value={caseObj.Email}
+                  onchange={handleEmail}></lightning-input>
+                <lightning-input
+                  type="tel"
+                  required
+                  label="Entity Phone Number"
+                  name={caseObj.PracticPhone}
+                  value={caseObj.PracticPhone}
+                  onchange={handlePracticPhone}></lightning-input>
+                <lightning-input
+                  type="number"
+                  required
+                  label="Entity # of Location"
+                  name={caseObj.PracticeNoOfLocation}
+                  value={caseObj.PracticeNoOfLocation}
+                  onchange={handlePracticeNoOfLocation}></lightning-input>
+              </div>
+            </div>
+
+            <lightning-button class="slds-m-around_xx-small" onclick={handleReset} label="Cancel"></lightning-button>
+
+            <lightning-button
+              class="slds-m-around_xx-small"
+              variant="brand"
+              type="submit"
+              name="save"
+              label="Finish"
+              onclick={handleSubmit}
+              disabled={customerPicklistValue}>
+              <!-- <template if:false={isLoaded}>
+          <lightning-spinner alternative-text="Loading"></lightning-spinner>
+        </template> -->
+            </lightning-button>
+
+            <!-- <a class="slds-button slds-button_neutral slds-m-left_xx-large "  target="_blank"  href="https://deardoc--aasiadev.sandbox.my.site.com/deardochome/survey/runtimeApp.app?invitationId=0Ki6s000000LKfy&surveyName=case_survey&UUID=8d316b73-7acf-4f98-96a8-d1750ef26079">Survey</a> -->
+          </div>
+          <div class="box">
+            <b>Note: </b>
+            <p>
+              When entering a new customer, please click finish, refresh the page, and then go to the survey tab where
+              you need to select the new account and contact recently created, and hit the Survey button to complete the
+              final step.
+            </p>
+          </div>
+          <!-- <c-my-message
+      message="Follow these steps to complete the form: 
+               1. Enter your personal details.
+               2. Enter your address details.
+               3. Review and submit your form.">
+    </c-my-message> -->
+        </lightning-tab>
+        <lightning-tab label="Survey">
+          <c-survey-invitation parent-account={extractedWord}></c-survey-invitation>
+          <!-- <c-edit-customer></c-edit-customer> -->
+        </lightning-tab>
+
+        <lightning-tab label="Edit Customer" value="tab2" onactive={handleActive}>
+          <c-edit-customer parent-account={extractedWord}></c-edit-customer>
+        </lightning-tab>
+
+        <lightning-tab label="Technical Issue">
+          <c-technical-issue-help parent-account={extractedWord}></c-technical-issue-help>
+          <!-- <c-edit-customer></c-edit-customer> -->
+          <!-- <lightning-input
+        
+        type="text"
+        label="What is the issue you are seeing?">
+      </lightning-input> -->
+        </lightning-tab>
+      </lightning-tabset>
+    </lightning-card>
+  </template>
+</template>
+
+<!--  -->
+<!-- <lightning-button
+            class="slds-m-around_xx-small"
+            onclick={handleNext}
+            variant="brand"
+            label="Next"
+          ></lightning-button> -->
+
+<!-- <template if:true={next}>
+          <div class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_6-of-12">
+              <lightning-input
+                type="email"
+                name=""
+                label="What is the general practice email?"
+                required
+                value=""
+              ></lightning-input>
+             
+              <lightning-textarea
+              type="text"
+              required
+              label="What is the general phone number for your practice? "
+            ></lightning-textarea>
+
+            <lightning-textarea
+              type="text"
+              required
+              label="What are the phone numbers of ALL practice locations?  "
+            ></lightning-textarea>
+
+             
+
+              <lightning-textarea
+              type="text"
+              required
+              label="What is/are the practice website address(es)? "
+            ></lightning-textarea>
+
+              <lightning-textarea
+              type="text"
+              required
+              label="Do you offer or recommend any payment plans (for example: care credit)? "
+            ></lightning-textarea>
+
+              <lightning-textarea
+              type="text"
+              required
+              label="Do you have a complimentary consultation?"
+            ></lightning-textarea>
+
+              <lightning-textarea
+              type="text"
+              required
+              label="Please provide a list of insurances that you accept at your practice AND/OR let us know how we may respond to the common questions like  &quot;Do you accept...insurance?&quot;"
+            ></lightning-textarea>
+            
+
+            <lightning-textarea
+              type="text"
+              required
+              label="Are there any questions that people call and ask frequently that isn't something we already covered? "
+            ></lightning-textarea>
+            <lightning-textarea
+              type="text"
+              required
+              label="What information do you always make sure to share with new patients? Anything from &quot;Our parking lot is hard to find&quot; or info about the doctor "
+            ></lightning-textarea>
+
+              <lightning-textarea
+              type="text"
+              required
+              label="We know that ROI is important to your investment and we understand you have a lot of different types of services and appointments. If you were to take the average, how much do you charge per appointment?"
+            ></lightning-textarea>
+
+           
+            </div>
+
+            <div class="slds-col slds-size_6-of-12">
+                <lightning-input
+                type="text"
+                required
+                label="Do you accept Medicaid? If yes, what is the name of your state sponsored Medicaid?"
+              ></lightning-input>
+
+            <lightning-textarea
+              type="text"
+              required
+              label="What are the addresses of ALL practice locations?"
+            ></lightning-textarea>
+
+            <lightning-textarea
+                type="text"
+                required
+                label="Are all the services you offer accurate on your website? "
+             ></lightning-textarea>
+             <lightning-textarea
+               type="text"
+               required
+               label="What differentiates your practice from your competitors?"
+             ></lightning-textarea>
+             <lightning-textarea
+               type="text"
+               required
+               label="What would you advise new or existing patients to do in case of an emergency?"
+             ></lightning-textarea>
+
+             <lightning-textarea
+               type="text"
+               required
+               label="What promotions does your practice offer?"
+             ></lightning-textarea>
+
+             <lightning-textarea
+               type="text"
+               required
+               label="What are your hours of operation? (If you have more than one office, please specify what days and hours you are available at each location)"
+             ></lightning-textarea>
+
+
+            <lightning-textarea
+              type="text"
+              required
+              label="For the purpose of composing customized scripting, what can we say about your doctor(s), your team, or your practice?"
+            ></lightning-textarea>
+
+            <lightning-textarea
+              type="text"
+              required
+              label="What differentiates your practice from your competitors?"
+            ></lightning-textarea>
+            
+            </div>
+          </div>
+
+        
+        </template> -->

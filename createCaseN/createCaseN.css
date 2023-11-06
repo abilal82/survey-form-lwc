@@ -1,0 +1,9 @@
+.remove-border{   
+ --slds-c-card-sizing-border: 0 ; 
+
+}
+
+
+.box {
+    margin: 1rem;
+}
